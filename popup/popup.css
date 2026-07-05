@@ -1,0 +1,208 @@
+/* 京都はんなり見張り番 - ポップアップUI
+   京紫 × 生成り × 金茶をベースにした京都モダン配色 */
+
+:root {
+  --kyo-murasaki: #5b2c6f;   /* 京紫 */
+  --kyo-akane: #8e3b62;      /* 茜がかった紫 */
+  --kinari: #faf6ef;         /* 生成り */
+  --kinari-dark: #f0e8d8;
+  --kincha: #b8863b;         /* 金茶 */
+  --sumi: #3a2c46;           /* 墨がかった紫 */
+  --ash: #8a7a66;
+  --matcha: #6a8f5f;         /* 抹茶 */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 360px;
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  background: var(--kinari);
+  color: var(--sumi);
+}
+
+/* ---- ヘッダー: 夕暮れの京紫 + 麻の葉文様 ---- */
+.header {
+  position: relative;
+  padding: 22px 22px 20px;
+  color: #f6efe4;
+  background:
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><g stroke="rgba(255,255,255,0.10)" stroke-width="1" fill="none"><path d="M24 0 L24 48 M0 24 L48 24 M0 0 L48 48 M48 0 L0 48"/><path d="M24 0 L0 24 L24 48 L48 24 Z"/></g></svg>'),
+    linear-gradient(120deg, #40245c 0%, var(--kyo-murasaki) 45%, var(--kyo-akane) 100%);
+}
+.header .moon {
+  position: absolute; top: 18px; right: 22px;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f3d99a, #d9a83c);
+  box-shadow: 0 0 28px rgba(230, 190, 100, 0.55);
+}
+.subtitle {
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+h1 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.12em;
+}
+.snooze-banner {
+  margin-top: 12px;
+  font-size: 12px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(246,239,228,0.35);
+  border-radius: 999px;
+  padding: 5px 14px;
+  display: inline-block;
+}
+
+main { padding: 14px 14px 4px; }
+
+/* ---- カード ---- */
+.card {
+  background: #fff;
+  border: 1px solid rgba(91, 44, 111, 0.12);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 10px rgba(58, 44, 70, 0.06);
+}
+.card-title {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.card-title h2 {
+  font-size: 13.5px;
+  letter-spacing: 0.15em;
+  color: var(--kyo-murasaki);
+  border-left: 3px solid var(--kincha);
+  padding-left: 9px;
+}
+.total { font-size: 13px; color: var(--kincha); font-weight: 600; }
+
+/* ---- 皮肉ガチャ ---- */
+.gacha-card {
+  background: linear-gradient(160deg, #fff 0%, var(--kinari-dark) 100%);
+  text-align: center;
+}
+.gacha-card .phrase {
+  font-size: 14px;
+  line-height: 1.9;
+  min-height: 3.2em;
+  color: var(--sumi);
+  margin-bottom: 12px;
+}
+.gacha-card .phrase::before { content: "「"; color: var(--kincha); }
+.gacha-card .phrase::after  { content: "」"; color: var(--kincha); }
+
+/* ---- 今日のサイト別リスト ---- */
+.site-list { list-style: none; }
+.site-list li { margin-bottom: 12px; }
+.site-list li:last-child { margin-bottom: 0; }
+.site-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+.site-row .mins { color: var(--kyo-murasaki); font-weight: 600; }
+.site-row .nags { color: var(--ash); font-size: 11.5px; margin-left: 8px; }
+.bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--kinari-dark);
+  overflow: hidden;
+}
+.bar > span {
+  display: block; height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--kyo-murasaki), var(--kyo-akane));
+  transition: width 0.5s ease;
+}
+.bar > span.warn { background: linear-gradient(90deg, var(--kyo-akane), #c0392b); }
+.empty { font-size: 12.5px; color: var(--matcha); line-height: 1.8; }
+
+/* ---- 週間チャート ---- */
+.week-chart {
+  display: flex; align-items: flex-end; gap: 8px;
+  height: 88px;
+}
+.week-col {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  height: 100%;
+  gap: 4px;
+}
+.week-bar {
+  width: 100%;
+  border-radius: 6px 6px 2px 2px;
+  background: linear-gradient(180deg, var(--kyo-akane), var(--kyo-murasaki));
+  min-height: 2px;
+  transition: height 0.5s ease;
+}
+.week-bar.today { background: linear-gradient(180deg, var(--kincha), #9a6d2c); }
+.week-label { font-size: 10px; color: var(--ash); }
+.week-mins  { font-size: 9.5px; color: var(--kyo-murasaki); }
+
+/* ---- 設定 ---- */
+.setting-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 2px;
+  border-bottom: 1px dashed rgba(91, 44, 111, 0.15);
+  cursor: pointer;
+}
+.setting-row:last-child { border-bottom: none; }
+.setting-name { display: block; font-size: 13.5px; }
+.setting-desc { display: block; font-size: 11px; color: var(--ash); margin-top: 2px; }
+
+/* トグルスイッチ */
+.toggle {
+  appearance: none;
+  width: 44px; height: 24px;
+  border-radius: 999px;
+  background: #d8cfc0;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+.toggle::after {
+  content: "";
+  position: absolute; top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  transition: left 0.2s ease;
+}
+.toggle:checked { background: var(--kyo-murasaki); }
+.toggle:checked::after { left: 23px; }
+
+/* ---- ボタン ---- */
+.btn-ghost {
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: var(--kyo-murasaki);
+  background: transparent;
+  border: 1.5px solid rgba(91, 44, 111, 0.4);
+  border-radius: 999px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-ghost:hover {
+  background: var(--kyo-murasaki);
+  color: #f6efe4;
+}
+
+.footer {
+  text-align: center;
+  padding: 10px 0 16px;
+  font-size: 11px;
+  color: var(--ash);
+  letter-spacing: 0.2em;
+}
+
+.hidden { display: none !important; }

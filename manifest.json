@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "SNSやりすぎ京都はんなり見張り番",
+  "short_name": "京都はんなり見張り番",
+  "version": "1.0.0",
+  "description": "SNS・ショッピングサイトの見すぎを、京都弁の皮肉でやんわり(?)注意してくれる作業促進拡張機能どす。",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["alarms", "notifications", "storage", "tabs", "idle"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "京都はんなり見張り番",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://x.com/*",
+        "*://twitter.com/*",
+        "*://*.youtube.com/*",
+        "*://youtube.com/*",
+        "*://*.instagram.com/*",
+        "*://*.tiktok.com/*",
+        "*://*.booth.pm/*",
+        "*://booth.pm/*",
+        "*://*.amazon.co.jp/*",
+        "*://*.amazon.com/*",
+        "*://*.rakuten.co.jp/*"
+      ],
+      "js": ["content/content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

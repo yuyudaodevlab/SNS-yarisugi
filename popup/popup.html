@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>京都はんなり見張り番</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="moon"></div>
+    <p class="subtitle">SNSやりすぎ防止</p>
+    <h1>京都はんなり<br>見張り番</h1>
+    <p id="snooze-banner" class="snooze-banner hidden">🔕 今日は通知しない設定どす</p>
+  </header>
+
+  <main>
+    <!-- 今日のひとこと（皮肉ガチャ） -->
+    <section class="card gacha-card">
+      <p class="phrase" id="gacha-phrase">…</p>
+      <button id="gacha-btn" class="btn-ghost">🎴 皮肉ガチャを回す</button>
+    </section>
+
+    <!-- 今日の使用状況 -->
+    <section class="card">
+      <div class="card-title">
+        <h2>今日のお目付け帳</h2>
+        <span class="total" id="today-total">0分</span>
+      </div>
+      <ul id="site-list" class="site-list"></ul>
+      <p id="empty-today" class="empty hidden">今日はまだどこも見てはらしまへん。感心どすなあ。</p>
+    </section>
+
+    <!-- 週間のふりかえり -->
+    <section class="card">
+      <div class="card-title"><h2>七日間のふりかえり</h2></div>
+      <div id="week-chart" class="week-chart"></div>
+    </section>
+
+    <!-- 設定 -->
+    <section class="card">
+      <div class="card-title"><h2>お作法（設定）</h2></div>
+
+      <label class="setting-row">
+        <span>
+          <span class="setting-name">30分ごとの通知</span>
+          <span class="setting-desc">デスクトップ通知でやんわり催促</span>
+        </span>
+        <input type="checkbox" id="notify-enabled" class="toggle" />
+      </label>
+
+      <label class="setting-row">
+        <span>
+          <span class="setting-name">60分ごとのポップアップ</span>
+          <span class="setting-desc">画面の真ん中でしっかり催促</span>
+        </span>
+        <input type="checkbox" id="popup-enabled" class="toggle" />
+      </label>
+
+      <label class="setting-row">
+        <span>
+          <span class="setting-name">今日一日通知しない</span>
+          <span class="setting-desc">今晩まで見張りをお休みします</span>
+        </span>
+        <input type="checkbox" id="snooze-toggle" class="toggle" />
+      </label>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p id="footer-msg">おきばりやす。</p>
+  </footer>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
