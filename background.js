@@ -206,36 +206,47 @@ async function updateBadge(dayStats) {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   (async () => {
-    if (msg.type === "snoozeToday") {
-      const settings = await getSettings();
-      settings.snoozeDate = todayKey();
-      await chrome.storage.local.set({ settings });
-      sendResponse({ ok: true });
-    } else if (msg.type === "unsnooze") {
-      const settings = await getSettings();
-      settings.snoozeDate = "";
-      await chrome.storage.local.set({ settings });
-      sendResponse({ ok: true });
-    } else if (msg.type === "setSettings") {
-      const settings = { ...(await getSettings()), ...msg.settings };
-      await chrome.storage.local.set({ settings });
-      sendResponse({ ok: true, settings });
-    } else if (msg.type === "getState") {
-      const [settings, stats, session] = await Promise.all([getSettings(), getStats(), getSession()]);
-      sendResponse({
-        settings,
-        stats,
-        session,
-        today: todayKey(),
-        siteDefs: SITE_DEFS,
-        snoozedToday: isSnoozedToday(settings)
-      });
-    } else if (msg.type === "resetSession") {
-      // 「作業に戻る」を押したら連続使用カウントをリセットしてあげる
-      await chrome.storage.local.set({ session: { minutes: 0, lastActive: 0 } });
-      sendResponse({ ok: true });
-    } else {
-      sendResponse({ ok: false });
+    try {
+      if (msg.type === "snoozeToday") {
+        const settings = await getSettings();
+        settings.snoozeDate = todayKey();
+        await chrome.storage.local.set({ settings });
+        sendResponse({ ok: true });
+      } else if (msg.type === "unsnooze") {
+        const settings = await getSettings();
+        settings.snoozeDate = "";
+        await chrome.storage.local.set({ settings });
+        sendResponse({ ok: true });
+      } else if (msg.type === "setSettings") {
+        const settings = { ...(await getSettings()), ...msg.settings };
+        await chrome.storage.local.set({ settings });
+        sendResponse({ ok: true, settings });
+      } else if (msg.type === "getState") {
+        const [settings, stats, session] = await Promise.all([getSettings(), getStats(), getSession()]);
+        sendResponse({
+          settings,
+          stats,
+          session,
+          today: todayKey(),
+          siteDefs: SITE_DEFS,
+          snoozedToday: isSnoozedToday(settings)
+        });
+      } else if (msg.type === "resetSession") {
+        // 「作業に戻る」を押したら連続使用カウントをリセットしてあげる
+        await chrome.storage.local.set({ session: { minutes: 0, lastActive: 0 } });
+        sendResponse({ ok: true });
+      } else if (msg.type === "snooze5Min") {
+        // 「あと5分だけ堪忍」: セッション時間を5分戻し、5分後に再び催促が出るようにする
+        const session = await getSession();
+        session.minutes = Math.max(0, session.minutes - 5);
+        await chrome.storage.local.set({ session });
+        sendResponse({ ok: true });
+      } else {
+        sendResponse({ ok: false });
+      }
+    } catch (e) {
+      console.error("onMessage failed:", e);
+      sendResponse({ ok: false, error: e.message });
     }
   })();
   return true; // 非同期レスポンス

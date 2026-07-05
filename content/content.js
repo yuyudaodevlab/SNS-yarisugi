@@ -178,7 +178,10 @@
       chrome.runtime.sendMessage({ type: "resetSession" });
       removeOverlay();
     });
-    shadow.getElementById("five-more").addEventListener("click", removeOverlay);
+    shadow.getElementById("five-more").addEventListener("click", () => {
+      chrome.runtime.sendMessage({ type: "snooze5Min" });
+      removeOverlay();
+    });
     shadow.getElementById("snooze-today").addEventListener("click", () => {
       chrome.runtime.sendMessage({ type: "snoozeToday" });
       removeOverlay();

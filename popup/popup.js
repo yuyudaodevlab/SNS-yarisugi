@@ -9,14 +9,20 @@ let state = null;
 init();
 
 async function init() {
-  state = await chrome.runtime.sendMessage({ type: "getState" });
-  renderSnooze();
-  renderGacha();
-  renderToday();
-  renderWeek();
-  renderSettings();
-  renderFooter();
-  bindEvents();
+  try {
+    state = await chrome.runtime.sendMessage({ type: "getState" });
+    if (!state) throw new Error("バックグラウンドから状態を取得できまへんどした");
+    renderSnooze();
+    renderGacha();
+    renderToday();
+    renderWeek();
+    renderSettings();
+    renderFooter();
+    bindEvents();
+  } catch (e) {
+    console.error("Failed to initialize popup:", e);
+    $("footer-msg").textContent = "堪忍え、うまく読み込めまへんどした。開き直しとぉくれやす。";
+  }
 }
 
 // ---- 皮肉ガチャ ----
@@ -35,7 +41,7 @@ function renderGacha() {
 // ---- 今日の使用状況 ----
 
 function renderToday() {
-  const dayStats = state.stats[state.today];
+  const dayStats = state?.stats?.[state.today];
   const list = $("site-list");
   list.innerHTML = "";
 
@@ -82,7 +88,7 @@ function renderWeek() {
     const d = new Date();
     d.setDate(d.getDate() - i);
     const key = localDateKey(d);
-    const dayStats = state.stats[key];
+    const dayStats = state?.stats?.[key];
     const minutes = dayStats
       ? Object.values(dayStats.sites).reduce((a, s) => a + s.minutes, 0)
       : 0;
@@ -116,7 +122,7 @@ function renderSettings() {
 }
 
 function renderFooter() {
-  const dayStats = state.stats[state.today];
+  const dayStats = state?.stats?.[state.today];
   const total = dayStats
     ? Object.values(dayStats.sites).reduce((a, s) => a + s.minutes, 0)
     : 0;

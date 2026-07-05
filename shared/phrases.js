@@ -159,7 +159,7 @@ export function levelForNagCount(nagCount) {
 
 // サイトIDとレベルからランダムに一言選ぶ
 export function pickPhrase(siteId, level) {
-  const site = PHRASES[siteId] ? siteId : "generic";
+  const site = Object.hasOwn(PHRASES, siteId) ? siteId : "generic";
   const lv = Math.min(3, Math.max(1, level));
   // 指定サイトのセリフに、たまに汎用セリフも混ぜる
   const pool = [...PHRASES[site][lv], ...(site !== "generic" ? PHRASES.generic[lv] : [])];
